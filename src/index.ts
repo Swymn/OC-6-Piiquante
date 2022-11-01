@@ -2,11 +2,11 @@ import cors from 'cors';
 import express from 'express';
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
-import { UnknownRoutesHandler } from "~/middlewares/unknownRoutes.handler";
-import { ExceptionsHandler } from "~/middlewares/exceptions.handler";
+import { UnknownRoutesHandler } from "./middlewares/unknownRoutes.handler";
+import { ExceptionsHandler } from "./middlewares/exceptions.handler";
 
-import { UsersController } from "~/resources/user/user.controller";
-import { SaucesController } from "~/resources/sauce/sauce.controller";
+import { UsersController } from "./resources/user/user.controller";
+import { SaucesController } from "./resources/sauce/sauce.controller";
 
 dotenv.config({
     path: '.env',

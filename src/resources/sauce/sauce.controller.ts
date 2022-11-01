@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { SauceService } from "~/resources/sauce/sauce.service";
+import { SauceService } from "./sauce.service";
 
 export const SaucesController = Router();
 const sauceService = new SauceService();

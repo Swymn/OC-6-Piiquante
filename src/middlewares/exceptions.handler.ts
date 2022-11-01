@@ -25,5 +25,5 @@ export const ExceptionsHandler = (error: any, request: Request, result: Response
     }
 
     // Handle unexpected errors
-    return result.status(500).json({ error: 'Erreur interne' });
+    return result.status(500).json({ error: 'Internal Error' });
 }

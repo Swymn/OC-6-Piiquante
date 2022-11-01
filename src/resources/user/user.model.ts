@@ -1,4 +1,4 @@
-import type { User } from '~~/types/user';
+import type { User } from '../../../types/user';
 import { Schema, model } from 'mongoose';
 
 export const userSchema = new Schema<User>({

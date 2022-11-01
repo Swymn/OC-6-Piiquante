@@ -1,8 +1,8 @@
-import type { User } from "~~/types/user";
-import { userModel } from "~/resources/user/user.model";
+import type { User } from "../../../types/user";
+import { userModel } from "./user.model";
 
 export class UserService {
-    async create(userData: Omit<User, 'id'>): Promise<User> {
+    async create(userData: Omit<User, 'id'>): Promise<void> {
 
         /**
          * @TODO: Handle Errors
@@ -12,7 +12,7 @@ export class UserService {
             password: userData.password,
         };
 
-        return userModel.create(user);
+        await userModel.create(user);
     }
 
     async findAll(): Promise<User[]> {

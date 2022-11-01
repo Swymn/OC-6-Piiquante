@@ -1,5 +1,5 @@
-import type { Sauce } from '~~/types/sauce';
-import { sauceModel } from "~/resources/sauce/sauce.model";
+import type { Sauce } from '../../../types/sauce';
+import { sauceModel } from "./sauce.model";
 
 export class SauceService {
     async create(sauceData: Omit<Sauce, 'id'>): Promise<Sauce> {
