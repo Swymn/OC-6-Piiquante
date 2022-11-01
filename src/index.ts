@@ -26,8 +26,8 @@ app.use(express.urlencoded({
 // Home route
 app.get('/', (req, res) => res.send('🏠'));
 
-app.use('/users', UsersController);
-app.use('/sauces', SaucesController);
+app.use('/api/auth', UsersController);
+app.use('/api/sauces', SaucesController);
 
 // Handle unknown routes
 app.all('*', UnknownRoutesHandler);
