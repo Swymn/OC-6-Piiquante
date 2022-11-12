@@ -1,26 +1,39 @@
 import type { User } from "../../../types/user";
 import { UserModel } from "./userModel";
 import { CallbackError } from "mongoose";
-import bcrypt from "bcrypt";
 import { APIError } from "../../utils/error";
+import { sign } from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export class UserService {
+    /**
+     * Create a new user
+     *
+     * @param {User} userData - The user data
+     *
+     * @returns {Promise<any>} A promise to the user
+     *
+     * @throws {APIError} If the parameters are invalid
+     */
     async create(userData: User): Promise<any> {
 
         if (!userData.email) throw new APIError('Missing', 'Email is required');
         if (!userData.password) throw new APIError('Missing', 'Password is required');
 
+        const hash = await bcrypt.hash(userData.password, 10);
+
         const user = new UserModel({
             email: userData.email,
-            password: userData.password,
-        });
-        user.save((err: CallbackError) => {
-            if (err) throw new Error(err.message);
-
+            password: hash
         });
 
-        return {
-            message: 'User created',
+        try {
+            await user.save();
+            return {
+                message: 'User created !'
+            }
+        } catch (error) {
+            throw new APIError('Unknown', "An error occurred while creating the user");
         }
     }
 
@@ -38,7 +51,7 @@ export class UserService {
 
         return {
             userId: (userDB as any)._id,
-            token: 'token',
+            token: sign({user: userDB}, process.env.SECRET_JWT_SECRET as string, {expiresIn: '24h'})
         }
     }
 }

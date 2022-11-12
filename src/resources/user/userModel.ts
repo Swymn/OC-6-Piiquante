@@ -1,5 +1,6 @@
 import type { User } from '../../../types/user';
 import { Schema, model } from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
 import bcrypt from 'bcrypt';
 
 export const UserSchema = new Schema<User>({
@@ -13,7 +14,9 @@ export const UserSchema = new Schema<User>({
     }
 });
 
-UserSchema.pre('save', function (next) {
+UserSchema.plugin(uniqueValidator);
+
+/*UserSchema.pre('insertMany', function (next) {
     const user = this;
 
     // Only hash the password if it has been modified (or is new)
@@ -25,6 +28,7 @@ UserSchema.pre('save', function (next) {
         user.password = hash;
         next();
     });
-});
+});*/
+
 
 export const UserModel = model<User>('User', UserSchema);

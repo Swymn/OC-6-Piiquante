@@ -16,8 +16,16 @@ const app = express();
 const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGO_URI || '';
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Cross-Origin-Resource-Policy', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    next();
+});
+
 // We use cors to allow cross-origin requests
-app.use(cors());
+//app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true,
@@ -35,7 +43,9 @@ app.all('*', UnknownRoutesHandler);
 // /!\ This middleware must be the last one /!\ //
 app.use(ExceptionsHandler);
 
-mongoose.connect(mongoURI, {}, () => {
+mongoose.connect(mongoURI, {
+
+}, () => {
     console.log('Connected to MongoDB');
 })
 
