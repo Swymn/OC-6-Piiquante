@@ -1,17 +1,29 @@
 import type { Sauce } from '../../../types/sauce';
-import { isValidObjectId } from "mongoose";
+import { isValidObjectId, Types } from "mongoose";
 import { sauceModel } from "./sauce.model";
 import { APIError } from "../../utils/error";
+import mongoose from "mongoose";
 
 export class SauceService {
     async create({sauce, image}: Sauce): Promise<Sauce> {
         if (!sauce) throw new APIError('Missing', 'Sauce is required');
         if (!image) throw new APIError('Missing', 'Image is required');
 
-        return sauceModel.create({
+        const sauceToInsert: Sauce = {
+            userId: "",
             sauce,
-            image
-        });
+            manufacturer: "",
+            description: "",
+            mainPepper: "",
+            image,
+            heat: 0,
+            likes: 0,
+            dislikes: 0,
+            usersLiked: [],
+            usersDisliked: []
+        }
+
+        return sauceModel.create(sauceToInsert);
     }
 
     async findAll(): Promise<Sauce[]> {
@@ -43,14 +55,15 @@ export class SauceService {
         const sauce = await sauceModel.findOne({_id: id});
 
         if (!sauce) throw new APIError('NotFound', 'Sauce not found');
-        if (sauce.usersLiked.indexOf(userId) !== -1 || sauce.usersDisliked.indexOf(userId) !== -1) {
-            throw new APIError('Forbidden', 'User already liked or disliked this sauce');
-        }
 
         switch (like) {
             case -1:
                 sauce.usersDisliked.push(userId);
                 sauce.dislikes++;
+                if (sauce.usersLiked.indexOf(userId) !== -1) {
+                    sauce.usersLiked.splice(sauce.usersLiked.indexOf(userId), 1);
+                    sauce.likes--;
+                }
                 break;
             case 0:
                 if (sauce.usersLiked.indexOf(userId) !== -1) {
@@ -64,6 +77,10 @@ export class SauceService {
             case 1:
                 sauce.usersLiked.push(userId);
                 sauce.likes++;
+                if (sauce.usersDisliked.indexOf(userId) !== -1) {
+                    sauce.usersDisliked.splice(sauce.usersDisliked.indexOf(userId), 1);
+                    sauce.dislikes--;
+                }
                 break;
             default:
                 throw new APIError('Invalid', 'Like must be -1, 0 or 1');

@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export interface Sauce {
-    userId: Types.ObjectId;
+    userId: string;
     sauce: string,
     manufacturer: string,
     description: string,

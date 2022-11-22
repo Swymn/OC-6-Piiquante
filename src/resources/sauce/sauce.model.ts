@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose'
 
 export const sauceSchema = new Schema<Sauce>({
     userId: {
-        type: Schema.Types.ObjectId,
+        type: String,
     },
     sauce: {
         type: String,

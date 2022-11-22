@@ -1,5 +1,5 @@
 import type { User } from "../../../types/user";
-import { UserModel } from "./userModel";
+import { UserModel } from "./user.model";
 import { CallbackError } from "mongoose";
 import { APIError } from "../../utils/error";
 import bcrypt from "bcrypt";
