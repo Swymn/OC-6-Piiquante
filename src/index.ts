@@ -5,8 +5,7 @@ import dotenv from 'dotenv';
 import { UnknownRoutesHandler } from "./middlewares/unknownRoutes.handler";
 import { ExceptionsHandler } from "./middlewares/exceptions.handler";
 
-import { UsersController } from "./resources/user/user.controller";
-import { SaucesController } from "./resources/sauce/sauce.controller";
+import { Routes } from "./routes";
 
 dotenv.config({
     path: '.env',
@@ -23,8 +22,9 @@ app.use(express.urlencoded({
     extended: true,
 }));
 
-app.use('/api/auth', UsersController);
-app.use('/api/sauces', SaucesController);
+app.use('/uploads', express.static('uploads'));
+
+app.use('/api', Routes);
 
 // Handle unknown routes
 app.all('*', UnknownRoutesHandler);
