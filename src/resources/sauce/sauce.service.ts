@@ -6,8 +6,8 @@ import mongoose from "mongoose";
 
 export class SauceService {
     async create({sauce, image}: Sauce): Promise<Sauce> {
-        if (!sauce) throw new APIError('Missing', 'Sauce is required');
-        if (!image) throw new APIError('Missing', 'Image is required');
+        if (!sauce) throw new APIError("NotAcceptable", 'Missing', 'Sauce is required');
+        if (!image) throw new APIError("NotAcceptable", 'Missing', 'Image is required');
 
         const sauceToInsert: Sauce = {
             userId: "",
@@ -31,30 +31,30 @@ export class SauceService {
     }
 
     async findOne(id: string): Promise<Sauce | null> {
-        if (!id) throw new APIError('Missing', 'Id is required');
-        if (!isValidObjectId(id)) throw new APIError('Invalid', 'Id is not valid');
+        if (!id) throw new APIError("NotAcceptable",'Missing', 'Id is required');
+        if (!isValidObjectId(id)) throw new APIError("NotAcceptable", 'Invalid', 'Id is not valid');
         return sauceModel.findOne({_id: id});
     }
 
     async delete(id: string): Promise<any> {
-        if (!id) throw new APIError('Missing', 'Id is required');
+        if (!id) throw new APIError("NotAcceptable",'Missing', 'Id is required');
         return sauceModel.deleteOne({_id: id});
     }
 
     async update(id: string, {sauce, image}: Sauce): Promise<any> {
-        if (!id) throw new APIError('Missing', 'Id is required');
-        if (!sauce) throw new APIError('Missing', 'Sauce is required');
+        if (!id) throw new APIError("NotAcceptable",'Missing', 'Id is required');
+        if (!sauce) throw new APIError("NotAcceptable",'Missing', 'Sauce is required');
 
         return sauceModel.updateOne({_id: id}, {sauce, image});
     }
 
     async like(id: string, {userId, like}: { userId: string, like: number }): Promise<Sauce> {
-        if (!id) throw new APIError('Missing', 'Id is required');
-        if (!like) throw new APIError('Missing', 'Like is required');
+        if (!id) throw new APIError("NotAcceptable",'Missing', 'Id is required');
+        if (!like) throw new APIError("NotAcceptable",'Missing', 'Like is required');
 
         const sauce = await sauceModel.findOne({_id: id});
 
-        if (!sauce) throw new APIError('NotFound', 'Sauce not found');
+        if (!sauce) throw new APIError("NotFound", 'NotFound', 'Sauce not found');
 
         switch (like) {
             case -1:
@@ -83,7 +83,7 @@ export class SauceService {
                 }
                 break;
             default:
-                throw new APIError('Invalid', 'Like must be -1, 0 or 1');
+                throw new APIError("NotAcceptable", 'Invalid', 'Like must be -1, 0 or 1');
 
         }
 
