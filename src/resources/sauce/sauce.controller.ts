@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { SauceService } from "./sauce.service";
-import { APIError } from "../../utils/error";
 import { request } from "../../utils/request";
+import { upload } from "../../middlewares/uploads.handler";
 
 export const SaucesController = Router();
 const sauceService = new SauceService();
@@ -20,9 +20,9 @@ SaucesController.get('/:id', async (req, res, next) => {
     });
 });
 
-SaucesController.post("/", async (req, res, next) => {
+SaucesController.post("/", upload, async (req, res, next) => {
     await request(res, async () => {
-        const sauce = await sauceService.create(req.body);
+        const sauce = await sauceService.create(req.body, req.file);
         return res.status(200).send(sauce);
     });
 });

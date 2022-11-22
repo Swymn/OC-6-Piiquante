@@ -1,13 +1,14 @@
 import type { Sauce } from '../../../types/sauce';
-import { isValidObjectId, Types } from "mongoose";
+import { isValidObjectId } from "mongoose";
 import { sauceModel } from "./sauce.model";
 import { APIError } from "../../utils/error";
-import mongoose from "mongoose";
 
 export class SauceService {
-    async create({sauce, image}: Sauce): Promise<Sauce> {
+    async create({sauce}: Sauce, image: Express.Multer.File | undefined): Promise<Sauce> {
         if (!sauce) throw new APIError("NotAcceptable", 'Missing', 'Sauce is required');
         if (!image) throw new APIError("NotAcceptable", 'Missing', 'Image is required');
+
+        const path = image.path.replace(/\\/g, '/');
 
         const sauceToInsert: Sauce = {
             userId: "",
@@ -15,7 +16,7 @@ export class SauceService {
             manufacturer: "",
             description: "",
             mainPepper: "",
-            image,
+            image: path,
             heat: 0,
             likes: 0,
             dislikes: 0,
