@@ -7,6 +7,7 @@ export enum ErrorType {
     Server = 'Server',
     Unknown = 'Unknown',
     Missing = 'Missing',
+    BadRequest = 'BadRequest',
 }
 
 export interface ApiError {

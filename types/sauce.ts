@@ -2,11 +2,11 @@ import { Types } from "mongoose";
 
 export interface Sauce {
     userId: Types.ObjectId;
-    name: string,
+    sauce: string,
     manufacturer: string,
     description: string,
     mainPepper: string,
-    imageUrl: string,
+    image: string,
     heat: number,
     likes: number,
     dislikes: number,

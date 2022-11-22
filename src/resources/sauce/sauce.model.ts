@@ -5,7 +5,7 @@ export const sauceSchema = new Schema<Sauce>({
     userId: {
         type: Schema.Types.ObjectId,
     },
-    name: {
+    sauce: {
         type: String,
     },
     manufacturer: {
@@ -17,7 +17,7 @@ export const sauceSchema = new Schema<Sauce>({
     mainPepper: {
         type: String,
     },
-    imageUrl: {
+    image: {
         type: String,
     },
     heat: {

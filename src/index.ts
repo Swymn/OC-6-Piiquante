@@ -23,9 +23,6 @@ app.use(express.urlencoded({
     extended: true,
 }));
 
-// Home route
-app.get('/', (req, res) => res.send('🏠'));
-
 app.use('/api/auth', UsersController);
 app.use('/api/sauces', SaucesController);
 
