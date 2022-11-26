@@ -1,4 +1,4 @@
-import type { User, UserResponse } from "../../../types/user";
+import type { User } from "../../../types/user";
 import { UserModel } from "./user.model";
 import { CallbackError } from "mongoose";
 import { APIError } from "../../utils/error";
@@ -35,7 +35,18 @@ export class UserService {
         }
     }
 
-    async findOne(user: User): Promise<UserResponse> {
+    /**
+     * Find a user by its email.
+     *
+     * @param user {User} - The user data
+     *
+     * @returns {Promise<User>} A promise to the user
+     *
+     * @throws {APIError} If the parameters are invalid
+     * @throws {APIError} If the user is not found
+     * @throws {APIError} If the password is not valid
+     */
+    async findOne(user: User): Promise<User> {
 
         if (!user.email) throw new APIError("NotAcceptable", 'Missing', 'Email is required');
         if (!user.password) throw new APIError("NotAcceptable", 'Missing', 'Password is required');

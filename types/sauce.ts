@@ -1,6 +1,5 @@
-import { Types } from "mongoose";
-
 export interface Sauce {
+    _id: string;
     userId: string;
     name: string,
     manufacturer: string,
@@ -13,3 +12,5 @@ export interface Sauce {
     usersLiked: string[],
     usersDisliked: string[]
 }
+
+export interface SauceRequest extends Omit<Sauce, "_id"> {}

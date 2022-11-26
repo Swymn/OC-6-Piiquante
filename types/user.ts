@@ -1,10 +1,7 @@
-import { ObjectId } from "mongoose";
-
 export interface User {
+    _id: any;
     email: string,
     password: string,
 }
 
-export interface UserResponse extends User {
-    _id: any,
-}
+export interface UserRequest extends Omit<User, "_id"> {}
