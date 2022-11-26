@@ -2,7 +2,7 @@ import type { Sauce } from '../../../types/sauce';
 import { isValidObjectId } from "mongoose";
 import { sauceModel } from "./sauce.model";
 import { APIError } from "../../utils/error";
-import { User, UserResponse } from "../../../types/user";
+import { UserResponse } from "../../../types/user";
 
 interface ICreate {
     userId: string;
@@ -70,6 +70,7 @@ export class SauceService {
             manufacturer: sauce.manufacturer ?? sauceDB.manufacturer,
             description: sauce.description ?? sauceDB.description,
             mainPepper: sauce.mainPepper ?? sauceDB.mainPepper,
+            heat: sauce.heat ?? sauceDB.heat,
             imageUrl: image ? image.path.replace(/\\/g, '/') : sauceDB.imageUrl,
         });
     }
