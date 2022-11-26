@@ -49,4 +49,11 @@ export class UserService {
 
         return userDB;
     }
+
+    async exist(id: string): Promise<boolean> {
+        if (!id) throw new APIError("BadRequest", 'Missing', 'Id is required');
+        const user = await UserModel.findOne({_id: id});
+
+        return !!user;
+    }
 }

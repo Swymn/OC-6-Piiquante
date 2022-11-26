@@ -1,6 +1,7 @@
 import { APIError } from "./error";
 import { Response } from "express";
 import { ErrorCode } from "../../types/errors";
+import * as console from "console";
 
 export const request = async (res: Response, callback: Function) => {
     try {
@@ -9,6 +10,7 @@ export const request = async (res: Response, callback: Function) => {
         if (e instanceof APIError) {
             return res.status(ErrorCode[e.code]).json({error: e.message});
         }
-        return res.status(400).json({error: APIError.UNKNOWN_ERROR});
+        console.error(e);
+        return res.status(500).json({error: APIError.UNKNOWN_ERROR});
     }
 }
