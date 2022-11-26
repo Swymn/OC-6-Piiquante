@@ -2,7 +2,6 @@ import { Router } from "express";
 import { SauceService } from "./sauce.service";
 import { request } from "../../utils/request";
 import { upload } from "../../middlewares/uploads.handler";
-import { authorize } from "../../utils/authorize";
 
 export const SaucesController = Router();
 const sauceService = new SauceService();
@@ -23,12 +22,9 @@ SaucesController.get('/:id', async (req, res, next) => {
 
 SaucesController.post("/", upload, async (req, res, next) => {
     await request(res, async () => {
-
-        const user = await authorize(req);
-
         const {name, manufacturer, description, mainPepper, heat} = JSON.parse(req.body.sauce);
         const sauce = await sauceService.create({
-            userId: user._id,
+            userId: (req as any).user._id ?? "",
             name: name ?? "",
             manufacturer: manufacturer ?? "",
             description: description ?? "",
@@ -41,8 +37,7 @@ SaucesController.post("/", upload, async (req, res, next) => {
 
 SaucesController.put("/:id", upload, async (req, res, next) => {
     await request(res, async () => {
-        console.log('body', req);
-        const status = await sauceService.update(req.params.id, req.body?.sauce, req.file);
+        const status = await sauceService.update(req.params.id, (req as any).user, req.body, req.file);
 
         if (status.matchedCount === 1) {
             return res.status(200).send(status.modifiedCount === 1 ? {message: 'Sauce updated'} : {error: 'Sauce not updated'});
@@ -66,10 +61,7 @@ SaucesController.delete('/:id', async (req, res, next) => {
 
 SaucesController.post('/:id/like', async (req, res, next) => {
     await request(res, async () => {
-
-        const user = await authorize(req);
-
-        await sauceService.like(req.params.id, user._id, req.body);
+        await sauceService.like(req.params.id, (req as any).user._id, req.body);
         return res.status(200).json({message: "Request successfully done."});
     });
 });

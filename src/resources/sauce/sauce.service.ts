@@ -2,7 +2,7 @@ import type { Sauce } from '../../../types/sauce';
 import { isValidObjectId } from "mongoose";
 import { sauceModel } from "./sauce.model";
 import { APIError } from "../../utils/error";
-import { User } from "../../../types/user";
+import { User, UserResponse } from "../../../types/user";
 
 interface ICreate {
     userId: string;
@@ -18,7 +18,7 @@ export class SauceService {
         if (!name) throw new APIError("BadRequest", 'Missing', 'Sauce is required');
 
         const sauceToInsert: Sauce = {
-            userId: userId,
+            userId: userId ?? "",
             name: name,
             manufacturer: manufacturer,
             description: description,
@@ -54,16 +54,24 @@ export class SauceService {
         return sauceModel.deleteOne({_id: id});
     }
 
-    async update(id: string, sauce: string, image: Express.Multer.File | undefined): Promise<any> {
+    async update(id: string, user: UserResponse, sauce: any, image: Express.Multer.File | undefined): Promise<any> {
         if (!id) throw new APIError("BadRequest",'Missing', 'Id is required');
         if (!sauce) throw new APIError("BadRequest",'Missing', 'Sauce is required');
-        if (!image) throw new APIError("BadRequest",'Missing', 'Image is required');
 
         if (!isValidObjectId(id)) throw new APIError("BadRequest", 'Invalid', 'Id is not valid');
 
-        const path = image.path.replace(/\\/g, '/');
+        const sauceDB = await sauceModel.findOne({_id: id}) as Sauce;
 
-        return sauceModel.updateOne({_id: id}, {name: sauce, image: path});
+        if (!sauce) throw new APIError("NotFound", 'NotFound', 'Sauce not found');
+        if (sauceDB.userId !== user._id) throw new APIError("Forbidden", 'Forbidden', 'You are not allowed to update this sauce');
+
+        return sauceModel.updateOne({_id: id}, {
+            name: sauce.name ?? sauceDB.name,
+            manufacturer: sauce.manufacturer ?? sauceDB.manufacturer,
+            description: sauce.description ?? sauceDB.description,
+            mainPepper: sauce.mainPepper ?? sauceDB.mainPepper,
+            imageUrl: image ? image.path.replace(/\\/g, '/') : sauceDB.imageUrl,
+        });
     }
 
     async like(id: string, userId: string, {like}: { like: number }): Promise<Sauce> {

@@ -1,4 +1,4 @@
-import type { User } from "../../../types/user";
+import type { User, UserResponse } from "../../../types/user";
 import { UserModel } from "./user.model";
 import { CallbackError } from "mongoose";
 import { APIError } from "../../utils/error";
@@ -35,25 +35,17 @@ export class UserService {
         }
     }
 
-    async find(user: User): Promise<User> {
+    async findOne(user: User): Promise<UserResponse> {
 
         if (!user.email) throw new APIError("NotAcceptable", 'Missing', 'Email is required');
         if (!user.password) throw new APIError("NotAcceptable", 'Missing', 'Password is required');
-        const userDB: User | null = await UserModel.findOne({email: user.email}, (error: CallbackError) => {
-            if (error) throw new APIError("InternalServerError", 'Server', error.message);
-        }).clone();
+
+        const userDB = await UserModel.findOne({email: user.email});
 
         if (!userDB) throw new APIError("NotFound", 'NotFound', 'User not found');
 
         if (!bcrypt.compareSync(user.password, userDB.password)) throw new APIError("NotAcceptable", 'Invalid', 'Invalid password');
 
         return userDB;
-    }
-
-    async exist(id: string): Promise<boolean> {
-        if (!id) throw new APIError("BadRequest", 'Missing', 'Id is required');
-        const user = await UserModel.findOne({_id: id});
-
-        return !!user;
     }
 }
