@@ -7,6 +7,7 @@ import { UnknownRoutesHandler } from "./middlewares/unknownRoutes.handler";
 import { ExceptionsHandler } from "./middlewares/exceptions.handler";
 
 import { Routes } from "./routes";
+import { sauceModel } from './resources/sauce/sauce.model';
 
 dotenv.config({
     path: '.env',
