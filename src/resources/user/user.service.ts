@@ -1,6 +1,6 @@
 import type { User } from "../../../types/user";
 import { UserModel } from "./user.model";
-import { CallbackError } from "mongoose";
+import { CallbackError, MongooseError } from "mongoose";
 import { APIError } from "../../utils/error";
 import bcrypt from "bcrypt";
 
@@ -31,7 +31,11 @@ export class UserService {
                 message: 'User created !'
             }
         } catch (error) {
-            throw new APIError("BadGateway", 'Unknown', "An error occurred while creating the user");
+            throw new APIError(
+                "Conflict",
+                "Conflict",
+                (error as any).message ?? "An error occurred while creating the user"
+            );
         }
     }
 

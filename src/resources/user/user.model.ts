@@ -1,7 +1,6 @@
 import type { User } from '../../../types/user';
 import { Schema, model } from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
-import bcrypt from 'bcrypt';
 
 export const UserSchema = new Schema<User>({
     email: {
